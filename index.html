@@ -1,187 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Form to Google Sheet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Data Entry Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* Custom styles for toast messages */
-      .toast {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #4caf50;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        font-size: 1rem;
-        z-index: 1000;
-        opacity: 1;
-        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-      }
-
-      .toast-warning {
-        background-color: #f39c12;
-      }
-
-      .toast-error {
-        background-color: #e74c3c;
-      }
-
-      .toast.fade-out {
-        opacity: 0;
-        transform: translateY(20px);
-      }
+        /* Optional: Add some custom styles if needed */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
     </style>
-  </head>
-  <body class="bg-gray-100 font-inter">
-    <div class="container mx-auto px-4 py-10">
-      <div class="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
-        <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
-          Add Data to Google Sheet
-        </h1>
-        <form id="myForm" class="space-y-4">
-          <div>
-            <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
-              >Name</label
-            >
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Enter your name"
-              required
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div>
-            <label for="surname" class="block text-gray-700 text-sm font-bold mb-2"
-              >Surname</label
-            >
-            <input
-              type="text"
-              id="surname"
-              name="surname"
-              placeholder="Enter your surname"
-              required
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div>
-            <label for="phone" class="block text-gray-700 text-sm font-bold mb-2"
-              >Phone Number</label
-            >
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              placeholder="Enter your phone number"
-              required
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <div>
-            <label for="email" class="block text-gray-700 text-sm font-bold mb-2"
-              >Email</label
-            >
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Enter your email"
-              required
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <button
-            type="submit"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-          >
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-2xl font-bold mb-6 text-center">Enter Data</h2>
+
+    <form id="dataForm" class="space-y-4">
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+            <input type="text" id="name" name="name" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <div>
+            <label for="surname" class="block text-sm font-medium text-gray-700">Surname:</label>
+            <input type="text" id="surname" name="surname" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700">Phone:</label>
+            <input type="tel" id="phone" name="phone" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+            <input type="email" id="email" name="email" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+        <button type="submit"
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Submit
-          </button>
-        </form>
-      </div>
-    </div>
+        </button>
+    </form>
 
-    <script>
-      const form = document.getElementById("myForm");
+    <div id="responseMessage" class="mt-4 text-center text-sm font-medium text-gray-700 hidden"></div>
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
+</div>
 
-        // Get form values
-        const name = document.getElementById("name").value;
-        const surname = document.getElementById("surname").value;
-        const phone = document.getElementById("phone").value;
-        const email = document.getElementById("email").value;
+<script>
+    const form = document.getElementById('dataForm');
+    const responseMessage = document.getElementById('responseMessage');
 
-        // Basic validation
-        if (!name || !surname || !phone || !email) {
-          showToast("Please fill in all fields.", "toast-warning");
-          return;
+    // IMPORTANT: Replace with your deployed Google Apps Script Web App URL
+    const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwpfb2CN13vvhjergAtx1ua4dvjJ1AGrxS0jLC9TgS7qo89g8WGLvHZ5zUEE4t5skQ/exec';
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+
+        // Append form data to URL search parameters
+        for (const [key, value] of formData.entries()) {
+            params.append(key, value);
         }
 
-        // Email validation (simple)
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          showToast("Please enter a valid email address.", "toast-warning");
-          return;
-        }
+        // Construct the full URL with parameters
+        const url = `${GOOGLE_APP_SCRIPT_URL}?${params.toString()}`;
 
-        // Disable the submit button to prevent multiple submissions
-        const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.textContent = "Submitting...";
+        // Send the GET request
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text(); // Or response.json() if your script returns JSON
+            })
+            .then(data => {
+                console.log('Success:', data);
+                responseMessage.textContent = 'Data submitted successfully!';
+                responseMessage.className = 'mt-4 text-center text-sm font-medium text-green-700 block'; // Show success message
+                form.reset(); // Clear the form
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                responseMessage.textContent = 'Error submitting data.';
+                responseMessage.className = 'mt-4 text-center text-sm font-medium text-red-700 block'; // Show error message
+            });
+    });
+</script>
 
-        // Construct the data object
-        const data = { name, surname, phone, email };
-
-        // Send data to Google Apps Script
-        fetch(
-          "https://script.google.com/macros/s/AKfycbzaE5Ls8M8kT66yYl3EmtSqNmVfKIoRIzMPaKLoX7bfYMVxzApfE70KQEe-F9ZIyzCufw/exec", // Replace with your script URL
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            // Handle the response from Google Apps Script
-            if (data.result === "success") {
-              showToast("Data added successfully!", "toast");
-              form.reset(); // Clear the form
-            } else {
-              showToast("Error: " + data.error, "toast-error");
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            showToast("Failed to submit data. Please try again.", "toast-error");
-          })
-          .finally(() => {
-            // Re-enable the submit button
-            submitButton.disabled = false;
-            submitButton.textContent = "Submit";
-          });
-      });
-
-      function showToast(message, type = "toast") {
-        const toast = document.createElement("div");
-        toast.className = `toast ${type}`;
-        toast.textContent = message;
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-          toast.classList.add("fade-out");
-          setTimeout(() => toast.remove(), 500); // Remove after fade out
-        }, 2000); // 2 seconds
-      }
-    </script>
-  </body>
+</body>
 </html>
