@@ -1,11 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form to Google Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+    <style>
+      /* Custom styles for toast messages */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        font-size: 1rem;
+        z-index: 1000;
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      }
+
+      .toast-warning {
+        background-color: #f39c12;
+      }
+
+      .toast-error {
+        background-color: #e74c3c;
+      }
+
+      .toast.fade-out {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-inter">
+    <div class="container mx-auto px-4 py-10">
+      <div class="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+          Add Data to Google Sheet
+        </h1>
+        <form id="myForm" class="space-y-4">
+          <div>
+            <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
+              >Name</label
+            >
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              required
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div>
+            <label for="surname" class="block text-gray-700 text-sm font-bold mb-2"
+              >Surname</label
+            >
+            <input
+              type="text"
+              id="surname"
+              name="surname"
+              placeholder="Enter your surname"
+              required
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div>
+            <label for="phone" class="block text-gray-700 text-sm font-bold mb-2"
+              >Phone Number</label
+            >
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="Enter your phone number"
+              required
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div>
+            <label for="email" class="block text-gray-700 text-sm font-bold mb-2"
+              >Email</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              required
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("myForm");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Get form values
+        const name = document.getElementById("name").value;
+        const surname = document.getElementById("surname").value;
+        const phone = document.getElementById("phone").value;
+        const email = document.getElementById("email").value;
+
+        // Basic validation
+        if (!name || !surname || !phone || !email) {
+          showToast("Please fill in all fields.", "toast-warning");
+          return;
+        }
+
+        // Email validation (simple)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          showToast("Please enter a valid email address.", "toast-warning");
+          return;
+        }
+
+        // Disable the submit button to prevent multiple submissions
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+
+        // Construct the data object
+        const data = { name, surname, phone, email };
+
+        // Send data to Google Apps Script
+        fetch(
+          "https://script.google.com/macros/s/AKfycbzaE5Ls8M8kT66yYl3EmtSqNmVfKIoRIzMPaKLoX7bfYMVxzApfE70KQEe-F9ZIyzCufw/exec", // Replace with your script URL
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            // Handle the response from Google Apps Script
+            if (data.result === "success") {
+              showToast("Data added successfully!", "toast");
+              form.reset(); // Clear the form
+            } else {
+              showToast("Error: " + data.error, "toast-error");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showToast("Failed to submit data. Please try again.", "toast-error");
+          })
+          .finally(() => {
+            // Re-enable the submit button
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit";
+          });
+      });
+
+      function showToast(message, type = "toast") {
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.add("fade-out");
+          setTimeout(() => toast.remove(), 500); // Remove after fade out
+        }, 2000); // 2 seconds
+      }
+    </script>
+  </body>
 </html>
